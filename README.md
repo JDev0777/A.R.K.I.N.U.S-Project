@@ -30,7 +30,3 @@ Tutorial:
 3. Open the file A.R.K.I.N.U.S/dist
 4. Open app.exe
 5. Use it as you like
-
-Watchings: 7016 persons
-
-Downloads: 6241 downloads
