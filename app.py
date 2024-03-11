@@ -72,9 +72,8 @@ def lock_folder():
         print(Fore.RED + "La carpeta especificada no existe." + Style.RESET_ALL)
 
 # Función para desbloquear una carpeta
+
 def unlock_folder():
-    print_logo()
-    print_bloko()
     print(Fore.CYAN + "Desbloqueando carpeta..." + Style.RESET_ALL)
     time.sleep(1)  # Simular proceso de desbloqueo
 
@@ -101,24 +100,40 @@ def unlock_folder():
     conn.close()
 
     if folder_info:
-        password = getpass.getpass("Ingrese la contraseña para desbloquear la carpeta: ")
-        if password == folder_info[2]:
-            # Obtener la ruta de destino en el escritorio
-            desktop_path = os.path.join(os.path.expanduser('~'), 'Desktop')
-            folder_name = os.path.basename(folder_info[1])
-            destination_path = os.path.join(desktop_path, folder_name)
 
-            # Mover la carpeta al escritorio
-            try:
-                shutil.move(os.path.join(program_dir, folder_name), destination_path)
-                print(Fore.GREEN + "Carpeta desbloqueada exitosamente." + Style.RESET_ALL)
-            except Exception as e:
-                print(Fore.RED + f"Error al desbloquear la carpeta: {str(e)}" + Style.RESET_ALL)
-        else:
-            print(Fore.RED + "Contraseña incorrecta." + Style.RESET_ALL)
-    else:
-        print(Fore.RED + "El número de carpeta especificado no es válido." + Style.RESET_ALL)
+        attempts_left = 3  # Numero de intentos máximo
+        wait_time = 100 # Tiempo de espera inicial en segundos
 
+        while attempts_left > 0:
+            password = getpass.getpass("Ingrese la contraseña para desbloquear la carpeta: ")
+            if password == folder_info[2]:
+                # Obtener la ruta de destino en el escritorio
+                desktop_path = os.path.join(os.path.expanduser('~'), 'Desktop')
+                folder_name = os.path.basename(folder_info[1])
+                destination_path = os.path.join(desktop_path, folder_name)
+
+                # Mover la carpeta al escritorio
+                try:
+                    shutil.move(os.path.join(program_dir, folder_name), destination_path)
+                    print(Fore.GREEN + "Carpeta desbloqueada exitosamente." + Style.RESET_ALL)
+                except Exception as e:
+                    print(Fore.RED + f"Error al desbloquear la carpeta: {str(e)}" + Style.RESET_ALL)
+                return
+            else:
+                attempts_left -= 1
+                if attempts_left > 0:
+                    print(Fore.RED + f"Contraseña Incorrecta. Intentos restantes: {attempts_left}" + Style.RESET_ALL)
+                else:
+                    print(Fore.RED + "Numero de intentos superado. Alarma activada." + Style.RESET_ALL)
+                    # Implementar alarma
+                    remaining_time = wait_time
+                    while remaining_time > 0:
+                        print(Fore.YELLOW + f"El programa está bloqueado. Tiempo restante: {remaining_time} segundos." + Style.RESET_ALL)
+                        time.sleep(1)
+                        remaining_time -= 1
+                       # Duplicar el tiempo de espera para el siguiente bloqueo
+                    print("Alarma desactivada. Puede intentarlo nuevamente.")
+            
 if __name__ == "__main__":
     create_database()
 
