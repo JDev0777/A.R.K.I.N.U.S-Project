@@ -131,7 +131,6 @@ def unlock_folder():
                         print(Fore.YELLOW + f"El programa está bloqueado. Tiempo restante: {remaining_time} segundos." + Style.RESET_ALL)
                         time.sleep(1)
                         remaining_time -= 1
-                       # Duplicar el tiempo de espera para el siguiente bloqueo
                     print("Alarma desactivada. Puede intentarlo nuevamente.")
             
 if __name__ == "__main__":
